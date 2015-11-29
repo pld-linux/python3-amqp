@@ -17,7 +17,7 @@ Source0:	https://pypi.python.org/packages/source/a/amqp/%{module}-%{version}.tar
 # Source0-md5:	5aa44107d142f56385d2375f302cf7b0
 URL:		http://amqp.readthedocs.org/
 BuildRequires:	rpm-pythonprov
-BuildRequires:	rpmbuild(macros) >= 1.612
+BuildRequires:	rpmbuild(macros) >= 1.710
 %if %{with python2}
 BuildRequires:	python-setuptools
 %if %{with tests}

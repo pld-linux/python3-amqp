@@ -1,6 +1,6 @@
 #
 # Conditional build:
-%bcond_without	doc	# don't build doc
+%bcond_with	doc	# build doc (broken)
 %bcond_with	tests	# do not perform "make test"
 %bcond_without	python2 # CPython 2.x module
 %bcond_without	python3 # CPython 3.x module
@@ -9,12 +9,12 @@
 Summary:	AMQP 0.9.1 client library
 Summary(pl.UTF-8):	Biblioteka kliencka AMQP 0.9.1
 Name:		python-%{module}
-Version:	1.4.7
-Release:	4
+Version:	2.0.2
+Release:	1
 License:	LGPL v2.1
 Group:		Libraries/Python
-Source0:	https://pypi.python.org/packages/source/a/amqp/%{module}-%{version}.tar.gz
-# Source0-md5:	5aa44107d142f56385d2375f302cf7b0
+Source0:	https://pypi.python.org/packages/05/2d/774585deb3329df51c750ab7da248f874dfbbe7a794941fc7ba2ec263dc1/%{module}-%{version}.tar.gz
+# Source0-md5:	5a49c0e15448a5070e6efcc1682fe998
 URL:		http://amqp.readthedocs.org/
 BuildRequires:	rpm-pythonprov
 BuildRequires:	rpmbuild(macros) >= 1.710

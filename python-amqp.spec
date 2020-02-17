@@ -10,12 +10,13 @@
 Summary:	AMQP 0.9.1 client library
 Summary(pl.UTF-8):	Biblioteka kliencka AMQP 0.9.1
 Name:		python-%{module}
-Version:	2.3.2
-Release:	2
+Version:	2.5.2
+Release:	1
 License:	LGPL v2.1
 Group:		Libraries/Python
-Source0:	https://files.pythonhosted.org/packages/source/a/amqp/%{module}-%{version}.tar.gz
-# Source0-md5:	11fce0d01f4ee6886a02415c20cece80
+# Source0:	https://files.pythonhosted.org/packages/source/a/amqp/%{module}-%{version}.tar.gz
+Source0:	https://pypi.debian.net/%{module}/%{module}-%{version}.tar.gz
+# Source0-md5:	852ecff645c00f124c78915fcc8ea7c0
 URL:		http://amqp.readthedocs.org/
 BuildRequires:	rpm-pythonprov
 BuildRequires:	rpmbuild(macros) >= 1.710

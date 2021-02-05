@@ -1,7 +1,7 @@
 #
 # Conditional build:
-%bcond_with	doc	# build doc (broken)
-%bcond_with	tests	# do not perform "make test"
+%bcond_without	doc	# Sphinx documentation
+%bcond_without	tests	# unit tests
 %bcond_without	python2 # CPython 2.x module
 %bcond_without	python3 # CPython 3.x module
 
@@ -10,44 +10,42 @@
 Summary:	AMQP 0.9.1 client library
 Summary(pl.UTF-8):	Biblioteka kliencka AMQP 0.9.1
 Name:		python-%{module}
-Version:	2.5.2
+# keep 2.x here for python2 support
+Version:	2.6.1
 Release:	1
-License:	LGPL v2.1
+License:	BSD
 Group:		Libraries/Python
-# Source0:	https://files.pythonhosted.org/packages/source/a/amqp/%{module}-%{version}.tar.gz
-Source0:	https://pypi.debian.net/%{module}/%{module}-%{version}.tar.gz
-# Source0-md5:	852ecff645c00f124c78915fcc8ea7c0
-URL:		http://amqp.readthedocs.org/
+Source0:	https://files.pythonhosted.org/packages/source/a/amqp/%{module}-%{version}.tar.gz
+# Source0-md5:	c8cf9c75d7cd2e747fa49f3e3c47b3b1
+URL:		https://amqp.readthedocs.io/
 BuildRequires:	rpm-pythonprov
-BuildRequires:	rpmbuild(macros) >= 1.710
+BuildRequires:	rpmbuild(macros) >= 1.714
 %if %{with python2}
-BuildRequires:	python-setuptools
+BuildRequires:	python-modules >= 1:2.7
+BuildRequires:	python-setuptools >= 20.6.7
 %if %{with tests}
-BuildRequires:	python-coverage >= 3.0
-BuildRequires:	python-mock
-BuildRequires:	python-nose
-BuildRequires:	python-nose-cover3
-BuildRequires:	python-unittest2>=0.4.0
-%endif
-%if %{with doc}
-BuildRequires:	python-sphinxcontrib-issuetracker
-BuildRequires:	sphinx-pdg-2
+BuildRequires:	python-case >= 1.3.1
+BuildRequires:	python-pytest >= 3.0
+BuildRequires:	python-pytest-rerunfailures >= 6.0
+BuildRequires:	python-vine >= 1.1.3
 %endif
 %endif
 %if %{with python3}
-BuildRequires:	python3-setuptools
+BuildRequires:	python3-modules >= 1:3.5
+BuildRequires:	python3-setuptools >= 20.6.7
 %if %{with tests}
-BuildRequires:	python3-coverage >= 3.0
-BuildRequires:	python3-mock
-BuildRequires:	python3-nose
-BuildRequires:	python3-nose-cover3
+BuildRequires:	python3-case >= 1.3.1
+BuildRequires:	python3-pytest >= 3.0
+BuildRequires:	python3-pytest-rerunfailures >= 6.0
+BuildRequires:	python3-vine >= 1.1.3
+BuildRequires:	python3-vine < 5
+%endif
 %endif
 %if %{with doc}
-BuildRequires:	python3-sphinxcontrib-issuetracker
-BuildRequires:	sphinx-pdg-3
+BuildRequires:	python-sphinx_celery >= 1.4.6
+BuildRequires:	sphinx-pdg-2
 %endif
-%endif
-Requires:	python-modules
+Requires:	python-modules >= 1:2.7
 BuildArch:	noarch
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
@@ -58,11 +56,19 @@ a pure python alternative when librabbitmq is not available.
 
 This library should be API compatible with librabbitmq.
 
+%description -l pl.UTF-8
+Ten projekt to odgałęzienie amqplib, pierwotnie napisane przez
+Barry'ego Pedersona. Jest utrzymywane przez projekt Celery i używane
+przez kombu jako czysto pythonowa alternatywa dla librabbitmq, jeśli
+ta nie jest dostępna.
+
+Biblioteka powinna być zgodna co do API z librabbitmq.
+
 %package -n python3-%{module}
 Summary:	AMQP 0.9.1 client library
 Summary(pl.UTF-8):	Biblioteka kliencka AMQP 0.9.1
 Group:		Libraries/Python
-Requires:	python3-modules
+Requires:	python3-modules >= 1:3.5
 
 %description -n python3-%{module}
 This is a fork of amqplib which was originally written by Barry
@@ -71,55 +77,53 @@ a pure python alternative when librabbitmq is not available.
 
 This library should be API compatible with librabbitmq.
 
+%description -n python3-%{module} -l pl.UTF-8
+Ten projekt to odgałęzienie amqplib, pierwotnie napisane przez
+Barry'ego Pedersona. Jest utrzymywane przez projekt Celery i używane
+przez kombu jako czysto pythonowa alternatywa dla librabbitmq, jeśli
+ta nie jest dostępna.
+
+Biblioteka powinna być zgodna co do API z librabbitmq.
+
 %package apidocs
-Summary:	%{module} API documentation
-Summary(pl.UTF-8):	Dokumentacja API %{module}
+Summary:	API documentation for amqp module
+Summary(pl.UTF-8):	Dokumentacja API modułu amqp
 Group:		Documentation
+Obsoletes:	python3-amqp-apidocs < 2.6.1
 
 %description apidocs
-API documentation for %{module}.
+API documentation for amqp module.
 
 %description apidocs -l pl.UTF-8
-Dokumentacja API %{module}.
-
-%package -n python3-%{module}-apidocs
-Summary:	%{module} API documentation
-Summary(pl.UTF-8):	Dokumentacja API %{module}
-Group:		Documentation
-
-%description -n python3-%{module}-apidocs
-API documentation for %{module}.
-
-%description -n python3-%{module}-apidocs -l pl.UTF-8
-Dokumentacja API %{module}.
+Dokumentacja API modułu amqp.
 
 %prep
 %setup -q -n %{module}-%{version}
 
 %build
 %if %{with python2}
-%py_build %{?with_tests:test}
+%py_build
 
-%if %{with doc}
-cd docs
-PYTHONPATH=../build-2/lib %{__make} -j1 html SPHINXBUILD=sphinx-build-2
-rm -rf .build/html/_sources
-mv .build .build2
-cd ..
+%if %{with tests}
+PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 \
+PYTEST_PLUGINS="case.pytest" \
+%{__python} -m pytest t/unit
 %endif
-
 %endif
 
 %if %{with python3}
-%py3_build %{?with_tests:test}
+%py3_build
+
+%if %{with tests}
+PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 \
+PYTEST_PLUGINS="case.pytest" \
+%{__python3} -m pytest t/unit
+%endif
+%endif
 
 %if %{with doc}
-cd docs
-PYTHONPATH=../build-3/lib %{__make} -j1 html SPHINXBUILD=sphinx-build-3
-rm -rf .build/html/_sources
-mv .build .build3
-cd ..
-%endif
+%{__make} -C docs html \
+	SPHINXBUILD=sphinx-build-2
 %endif
 
 %install
@@ -141,28 +145,21 @@ rm -rf $RPM_BUILD_ROOT
 %if %{with python2}
 %files
 %defattr(644,root,root,755)
-%doc Changelog README.rst
-%dir %{py_sitescriptdir}/%{module}
-%{py_sitescriptdir}/%{module}/*.py[co]
+%doc Changelog LICENSE README.rst
+%{py_sitescriptdir}/%{module}
 %{py_sitescriptdir}/%{module}-%{version}-py*.egg-info
-
-%if %{with doc}
-%files apidocs
-%defattr(644,root,root,755)
-%doc docs/.build2/html/*
-%endif
 %endif
 
 %if %{with python3}
 %files -n python3-%{module}
 %defattr(644,root,root,755)
-%doc Changelog README.rst
+%doc Changelog LICENSE README.rst
 %{py3_sitescriptdir}/%{module}
 %{py3_sitescriptdir}/%{module}-%{version}-py*.egg-info
+%endif
 
 %if %{with doc}
-%files -n python3-%{module}-apidocs
+%files apidocs
 %defattr(644,root,root,755)
-%doc docs/.build3/html/*
-%endif
+%doc docs/_build/html/{_modules,_static,reference,*.html,*.js}
 %endif

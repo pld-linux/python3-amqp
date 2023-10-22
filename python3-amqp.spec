@@ -8,18 +8,18 @@
 Summary:	AMQP 0.9.1 client library
 Summary(pl.UTF-8):	Biblioteka kliencka AMQP 0.9.1
 Name:		python3-%{module}
-Version:	5.0.5
-Release:	4
+Version:	5.1.1
+Release:	1
 License:	BSD
 Group:		Libraries/Python
 Source0:	https://files.pythonhosted.org/packages/source/a/amqp/%{module}-%{version}.tar.gz
-# Source0-md5:	4b46b380d33d3fb8faccba415a1beaff
+# Source0-md5:	03bc34c959c522e910bec209f3c77b59
 URL:		https://amqp.readthedocs.io/
-BuildRequires:	python3-modules >= 1:3.6
+BuildRequires:	python3-modules >= 1:3.7
 BuildRequires:	python3-setuptools >= 1:20.6.7
 %if %{with tests}
 BuildRequires:	python3-case >= 1.3.1
-BuildRequires:	python3-pytest >= 3.0
+BuildRequires:	python3-pytest >= 6.2.5
 BuildRequires:	python3-pytest-rerunfailures >= 6.0
 BuildRequires:	python3-vine >= 5.0.0
 %endif
@@ -29,7 +29,7 @@ BuildRequires:	rpmbuild(macros) >= 1.714
 BuildRequires:	python3-sphinx_celery >= 1.4.8
 BuildRequires:	sphinx-pdg-3
 %endif
-Requires:	python3-modules >= 1:3.6
+Requires:	python3-modules >= 1:3.7
 BuildArch:	noarch
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 

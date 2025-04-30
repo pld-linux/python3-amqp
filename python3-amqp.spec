@@ -8,12 +8,12 @@
 Summary:	AMQP 0.9.1 client library
 Summary(pl.UTF-8):	Biblioteka kliencka AMQP 0.9.1
 Name:		python3-%{module}
-Version:	5.1.1
-Release:	3
+Version:	5.3.1
+Release:	1
 License:	BSD
 Group:		Libraries/Python
 Source0:	https://files.pythonhosted.org/packages/source/a/amqp/%{module}-%{version}.tar.gz
-# Source0-md5:	03bc34c959c522e910bec209f3c77b59
+# Source0-md5:	6f23f380ba02c1dbdc035f5f90c31475
 URL:		https://amqp.readthedocs.io/
 BuildRequires:	python3-modules >= 1:3.7
 BuildRequires:	python3-setuptools >= 1:20.6.7

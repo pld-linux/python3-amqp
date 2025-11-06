@@ -4,7 +4,6 @@
 %bcond_without	tests	# unit tests
 
 %define 	module		amqp
-%define		pypi_name	amqp
 Summary:	AMQP 0.9.1 client library
 Summary(pl.UTF-8):	Biblioteka kliencka AMQP 0.9.1
 Name:		python3-%{module}
@@ -18,15 +17,17 @@ URL:		https://amqp.readthedocs.io/
 BuildRequires:	python3-modules >= 1:3.7
 BuildRequires:	python3-setuptools >= 1:20.6.7
 %if %{with tests}
-BuildRequires:	python3-case >= 1.3.1
 BuildRequires:	python3-pytest >= 6.2.5
-BuildRequires:	python3-pytest-rerunfailures >= 6.0
+# optional
+#BuildRequires:	python3-pytest-rerunfailures >= 6.0
+#BuildRequires:	python3-pytest-sugar >= 0.9.1
 BuildRequires:	python3-vine >= 5.0.0
+BuildRequires:	python3-vine < 6
 %endif
 BuildRequires:	rpm-pythonprov
 BuildRequires:	rpmbuild(macros) >= 1.714
 %if %{with doc}
-BuildRequires:	python3-sphinx_celery >= 1.4.8
+BuildRequires:	python3-sphinx_celery >= 2.1.3
 BuildRequires:	sphinx-pdg-3
 %endif
 Requires:	python3-modules >= 1:3.7
@@ -67,7 +68,6 @@ Dokumentacja API modułu amqp.
 
 %if %{with tests}
 PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 \
-PYTEST_PLUGINS="case.pytest" \
 %{__python3} -m pytest t/unit
 %endif
 
